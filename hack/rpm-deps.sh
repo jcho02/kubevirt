@@ -824,24 +824,27 @@ if [ -z "${SINGLE_ARCH}" ] || [ "${SINGLE_ARCH}" == "ppc64le" ]; then
         $centos_extra \
         $exportserverbase_main
 
-    bazel run \
-        --config=${ARCHITECTURE} \
-        //:bazeldnf -- rpmtree \
-        --public --nobest \
-        --name libguestfs-tools_ppc64le${TARGET_SUFFIX} --arch ppc64le \
-        --basesystem ${BASESYSTEM} \
-        $centos_main \
-        $centos_extra \
-        $libguestfstools_main \
-        $libguestfstools_ppc64le \
-        $libguestfstools_extra \
-        ${bazeldnf_repos} \
-        --force-ignore-with-dependencies '^(kernel-|linux-firmware)' \
-        --force-ignore-with-dependencies '^(python[3]{0,1}-)' \
-        --force-ignore-with-dependencies '^mozjs60' \
-        --force-ignore-with-dependencies '^(libvirt-daemon-kvm|swtpm)' \
-        --force-ignore-with-dependencies '^(man-db|mandoc)' \
-        --force-ignore-with-dependencies '^dbus'
+    # ppc64le: no libguestfs-tools packages in the ppc64le repos
+    if false; then
+        bazel run \
+            --config=${ARCHITECTURE} \
+            //:bazeldnf -- rpmtree \
+            --public --nobest \
+            --name libguestfs-tools_ppc64le${TARGET_SUFFIX} --arch ppc64le \
+            --basesystem ${BASESYSTEM} \
+            $centos_main \
+            $centos_extra \
+            $libguestfstools_main \
+            $libguestfstools_ppc64le \
+            $libguestfstools_extra \
+            ${bazeldnf_repos} \
+            --force-ignore-with-dependencies '^(kernel-|linux-firmware)' \
+            --force-ignore-with-dependencies '^(python[3]{0,1}-)' \
+            --force-ignore-with-dependencies '^mozjs60' \
+            --force-ignore-with-dependencies '^(libvirt-daemon-kvm|swtpm)' \
+            --force-ignore-with-dependencies '^(man-db|mandoc)' \
+            --force-ignore-with-dependencies '^dbus'
+    fi
 
     bazel run \
         --config=${ARCHITECTURE} \
