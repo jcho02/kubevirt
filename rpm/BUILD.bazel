@@ -319,6 +319,7 @@ centos_stream_aliases(
         "exportserverbase_ppc64le",
         "pr-helper_x86_64",
         "pr-helper_aarch64",
+        "pr-helper_ppc64le",
         "sidecar-shim_x86_64",
         "sidecar-shim_aarch64",
         "sidecar-shim_s390x",
