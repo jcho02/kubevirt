@@ -2,17 +2,14 @@ FROM quay.io/centos/centos:stream10
 
 ARG ARCH
 ARG SONOBUOY_ARCH
-ARG BAZEL_ARCH
 ARG ENVTEST_K8S_VERSION=1.37.0
 ARG SETUP_ENVTEST_VERSION=v0.24.1
 
-ENV BAZEL_VERSION=7.5.0
 ENV GIMME_GO_VERSION=1.26.6
 ENV OPERATOR_COURIER_VERSION=2.1.11
 ENV SONOBUOY_VERSION=0.56.9
 ENV GOLANGCI_LINT_VERSION=v2.12.2
 
-ENV KUBEVIRT_CREATE_BAZELRCS=false
 
 # Install packages
 # Note: CentOS Stream 10 uses 'crb' repo like CS9
@@ -142,15 +139,6 @@ COPY rsyncd.conf /etc/rsyncd.conf
 COPY entrypoint.sh /entrypoint.sh
 
 COPY create_bazel_cache_rcs.sh /create_bazel_cache_rcs.sh
-
-# Install Bazel based on architecture.
-# No pre-built binary is available for ppc64le or s390x.
-RUN if test "${ARCH}" != "s390x" && test "${ARCH}" != "ppc64le"; then \
-       curl -L -o /usr/bin/bazel https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-linux-${BAZEL_ARCH} && \
-       chmod u+x /usr/bin/bazel; \
-    else \
-       echo "WARNING: No pre-built bazel binary available for ${ARCH}. Bazel must be installed separately or built from source."; \
-    fi
 
 # Add /root/go/src/kubevirt.io/kubevirt and mark it as a safe directory for git
 RUN mkdir -p /root/go/src/kubevirt.io/kubevirt && git config --global --add safe.directory /root/go/src/kubevirt.io/kubevirt

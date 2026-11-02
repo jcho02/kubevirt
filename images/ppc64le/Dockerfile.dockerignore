@@ -1,0 +1,4 @@
+*
+!_out/cmd
+!cmd/virt-launcher
+!cmd/virt-handler/nsswitch.conf
